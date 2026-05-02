@@ -1,6 +1,11 @@
 package com.sistemadecadastramento.controllers;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-public class UsuarioController { 
+
+@RestController
+@RequestMapping("/usuarios")
+public class UsuarioController {
     
 }
