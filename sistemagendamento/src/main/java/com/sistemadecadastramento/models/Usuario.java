@@ -15,20 +15,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tb_usuarios")
+@Table(name = "usuarios", schema = "public")
 public class Usuario {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "nome_usuario", nullable = false, length = 100)
+    @Column(name = "usuario", nullable = false, length = 100)
     private String nome;
 
-    @Column(name = "email_usuario", nullable = false)
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "senha_usuario", nullable = false)
+    @Column(name = "senha", nullable = false)
     private String senhaHash;
     
 }
