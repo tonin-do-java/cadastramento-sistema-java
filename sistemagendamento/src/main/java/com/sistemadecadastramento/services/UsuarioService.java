@@ -5,8 +5,11 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.sistemadecadastramento.dtos.UsuarioCreateRequestDto;
+import com.sistemadecadastramento.dtos.UsuarioRequestDto;
+import com.sistemadecadastramento.infra.CamposIncorretosException;
 import com.sistemadecadastramento.infra.UsuarioJaCadastradoException;
-import com.sistemadecadastramento.infra.UsuarioNaoExisteException;
+import com.sistemadecadastramento.infra.UsuarioNaoCadastradoException;
 import com.sistemadecadastramento.models.Usuario;
 import com.sistemadecadastramento.repository.UsuarioRepository;
 
@@ -28,28 +31,38 @@ public class UsuarioService {
     }
 
     public Usuario salvarCriar(Usuario usuario){
-        if(repository.existsById(usuario.getId())){
+        if(repository.existsByEmail(usuario.getEmail())){
             throw new UsuarioJaCadastradoException();
         }
+        
         return repository.save(usuario);
     }
 
-    public Usuario salvarAtualizar(Usuario usuario){
-        if(!existePorId(usuario.getId())){
-            throw new UsuarioNaoExisteException();
-        }
+    public Usuario salvarAtualizar(Long id, UsuarioRequestDto dto){
+        
+        Usuario usuarioExistente = repository.findById(id).orElseThrow(() -> new UsuarioNaoCadastradoException());
 
-        return repository.save(usuario);
-    }
+        usuarioExistente.setNome(dto.getNome());
+        usuarioExistente.setEmail(dto.getEmail());
 
-    public boolean existePorId(Long id){
-        return repository.existsById(id);
+        return repository.save(usuarioExistente);
     }
 
     public void deletar(Long id){
         if(!repository.existsById(id)){
-            throw new UsuarioNaoExisteException();
+            throw new UsuarioNaoCadastradoException();
         }
         repository.deleteById(id);
+    }
+
+    public Usuario transformarDto(UsuarioCreateRequestDto requestDto){
+        Usuario dadosUsuario = new Usuario();
+        dadosUsuario.setNome(requestDto.getNome());
+        dadosUsuario.setEmail(requestDto.getEmail());
+        if(!requestDto.getSenha().equals(requestDto.getConfirmacaoSenha())){
+            throw new CamposIncorretosException();
+        }
+        dadosUsuario.setSenhaHash(requestDto.getSenha());
+        return dadosUsuario;
     }
 }

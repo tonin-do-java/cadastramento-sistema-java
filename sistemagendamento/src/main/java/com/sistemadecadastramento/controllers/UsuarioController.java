@@ -15,10 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.sistemadecadastramento.infra.UsuarioNaoExisteException;
+import com.sistemadecadastramento.dtos.UsuarioCreateRequestDto;
+import com.sistemadecadastramento.dtos.UsuarioRequestDto;
+import com.sistemadecadastramento.infra.UsuarioNaoCadastradoException;
 import com.sistemadecadastramento.models.Usuario;
 import com.sistemadecadastramento.services.UsuarioService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 
@@ -40,12 +43,13 @@ public class UsuarioController {
         Optional<Usuario> usuarioEncontrado = service.buscarPorId(id);
         return usuarioEncontrado
                 .map(usuarioExis -> ResponseEntity.ok(usuarioExis))
-                .orElseThrow(() -> new UsuarioNaoExisteException());
+                .orElseThrow(() -> new UsuarioNaoCadastradoException());
     }
 
     @PostMapping("/Cadastrar")
-    public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario){
-        Usuario usuarioSalvo = service.salvarCriar(usuario);
+    public ResponseEntity<Usuario> criarUsuario(@Valid @RequestBody UsuarioCreateRequestDto requestDto){
+        
+        Usuario usuarioSalvo = service.salvarCriar(service.transformarDto(requestDto));
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -57,10 +61,9 @@ public class UsuarioController {
     }
 
     @PutMapping("/AtualizarCadastro/{id}")
-    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioAtualizado){
+    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioRequestDto dto){
 
-        usuarioAtualizado.setId(id); 
-        Usuario usuarioAtual = service.salvarAtualizar(usuarioAtualizado);
+        Usuario usuarioAtual = service.salvarAtualizar(id, dto);
 
         return ResponseEntity.ok(usuarioAtual);
     }

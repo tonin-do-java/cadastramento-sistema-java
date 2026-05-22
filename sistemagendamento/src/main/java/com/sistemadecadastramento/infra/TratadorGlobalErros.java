@@ -22,8 +22,8 @@ public class TratadorGlobalErros{
         return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
     }
 
-    @ExceptionHandler(UsuarioNaoExisteException.class)
-    public ResponseEntity<ErroResponse> tratarUsuarioInexistente(UsuarioNaoExisteException ex, HttpServletRequest request){
+    @ExceptionHandler(UsuarioNaoCadastradoException.class)
+    public ResponseEntity<ErroResponse> tratarUsuarioInexistente(UsuarioNaoCadastradoException ex, HttpServletRequest request){
 
         ErroResponse erro = new ErroResponse(
             HttpStatus.NOT_FOUND.value(), 
@@ -34,7 +34,16 @@ public class TratadorGlobalErros{
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
     }
 
-    
+    @ExceptionHandler(CamposIncorretosException.class)
+    public ResponseEntity<ErroResponse> tratarCampos(CamposIncorretosException ex, HttpServletRequest request){
+        ErroResponse erro = new ErroResponse(
+            HttpStatus.UNPROCESSABLE_ENTITY.value(), 
+            ex.getMessage(), 
+            request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(erro);
+    }
 }
 
 record ErroResponse(Integer status, String erro, String caminho){}
