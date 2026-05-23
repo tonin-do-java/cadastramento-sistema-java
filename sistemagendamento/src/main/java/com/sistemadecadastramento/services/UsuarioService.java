@@ -3,10 +3,12 @@ package com.sistemadecadastramento.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.sistemadecadastramento.dtos.UsuarioCreateRequestDto;
 import com.sistemadecadastramento.dtos.UsuarioRequestDto;
+import com.sistemadecadastramento.dtos.UsuarioResponseDto;
 import com.sistemadecadastramento.infra.CamposIncorretosException;
 import com.sistemadecadastramento.infra.UsuarioJaCadastradoException;
 import com.sistemadecadastramento.infra.UsuarioNaoCadastradoException;
@@ -22,12 +24,16 @@ public class UsuarioService {
     private final UsuarioRepository repository;
 
 
-    public List<Usuario> listarTodos(){
-        return repository.findAll();
+    public List<UsuarioResponseDto> listarTodos(){
+        List<Usuario> usuarios = repository.findAll();
+        return usuarios.stream().map(usuario -> new UsuarioResponseDto(usuario)).toList();
     }
 
-    public Optional<Usuario> buscarPorId(Long id){
-        return repository.findById(id);
+    public UsuarioResponseDto buscarPorId(Long id){
+        Usuario usuario = repository.findById(id)
+        .orElseThrow(() -> new UsuarioNaoCadastradoException());
+
+        return new UsuarioResponseDto(usuario);
     }
 
     public Usuario salvarCriar(Usuario usuario){
@@ -38,14 +44,16 @@ public class UsuarioService {
         return repository.save(usuario);
     }
 
-    public Usuario salvarAtualizar(Long id, UsuarioRequestDto dto){
+    public UsuarioResponseDto salvarAtualizar(Long id, UsuarioRequestDto dto){
         
         Usuario usuarioExistente = repository.findById(id).orElseThrow(() -> new UsuarioNaoCadastradoException());
 
         usuarioExistente.setNome(dto.getNome());
         usuarioExistente.setEmail(dto.getEmail());
 
-        return repository.save(usuarioExistente);
+        Usuario usuarioAtual = repository.save(usuarioExistente);
+
+        return new UsuarioResponseDto(usuarioAtual);
     }
 
     public void deletar(Long id){

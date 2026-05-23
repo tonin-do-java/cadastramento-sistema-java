@@ -2,7 +2,6 @@ package com.sistemadecadastramento.controllers;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.sistemadecadastramento.dtos.UsuarioCreateRequestDto;
 import com.sistemadecadastramento.dtos.UsuarioRequestDto;
-import com.sistemadecadastramento.infra.UsuarioNaoCadastradoException;
+import com.sistemadecadastramento.dtos.UsuarioResponseDto;
 import com.sistemadecadastramento.models.Usuario;
 import com.sistemadecadastramento.services.UsuarioService;
 
@@ -33,37 +32,37 @@ public class UsuarioController {
     private final UsuarioService service;
 
     @GetMapping("/listarTodos")
-    public ResponseEntity<List<Usuario>> listarTodos(){
-        List<Usuario> usuarios = service.listarTodos();
+    public ResponseEntity<List<UsuarioResponseDto>> listarTodos(){
+        List<UsuarioResponseDto> usuarios = service.listarTodos();
+        
         return ResponseEntity.ok(usuarios);
     }
 
     @GetMapping("/listarPorId/{id}")
-    public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id){
-        Optional<Usuario> usuarioEncontrado = service.buscarPorId(id);
-        return usuarioEncontrado
-                .map(usuarioExis -> ResponseEntity.ok(usuarioExis))
-                .orElseThrow(() -> new UsuarioNaoCadastradoException());
+    public ResponseEntity<UsuarioResponseDto> buscarPorId(@PathVariable Long id){
+        UsuarioResponseDto dto = service.buscarPorId(id);
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping("/Cadastrar")
-    public ResponseEntity<Usuario> criarUsuario(@Valid @RequestBody UsuarioCreateRequestDto requestDto){
+    public ResponseEntity<UsuarioResponseDto> criarUsuario(@Valid @RequestBody UsuarioCreateRequestDto requestDto){
         
         Usuario usuarioSalvo = service.salvarCriar(service.transformarDto(requestDto));
+        UsuarioResponseDto resposta = new UsuarioResponseDto(usuarioSalvo);
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(usuarioSalvo.getId())
+                .buildAndExpand(resposta.getId())
                 .toUri();
         
-        return ResponseEntity.created(uri).body(usuarioSalvo);
+        return ResponseEntity.created(uri).body(resposta);
     }
 
     @PutMapping("/AtualizarCadastro/{id}")
-    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioRequestDto dto){
+    public ResponseEntity<UsuarioResponseDto> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioRequestDto dto){
 
-        Usuario usuarioAtual = service.salvarAtualizar(id, dto);
+        UsuarioResponseDto usuarioAtual = service.salvarAtualizar(id, dto);
 
         return ResponseEntity.ok(usuarioAtual);
     }
