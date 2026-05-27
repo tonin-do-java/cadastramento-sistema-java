@@ -1,4 +1,4 @@
-package com.sistemadecadastramento.infra;
+package com.sistemadecadastramento.exceptions;
 
 public class CamposIncorretosException extends RuntimeException{
     public CamposIncorretosException(){

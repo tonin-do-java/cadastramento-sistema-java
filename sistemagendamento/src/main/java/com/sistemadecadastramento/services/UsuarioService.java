@@ -1,17 +1,15 @@
 package com.sistemadecadastramento.services;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.sistemadecadastramento.dtos.UsuarioCreateRequestDto;
 import com.sistemadecadastramento.dtos.UsuarioRequestDto;
 import com.sistemadecadastramento.dtos.UsuarioResponseDto;
-import com.sistemadecadastramento.infra.CamposIncorretosException;
-import com.sistemadecadastramento.infra.UsuarioJaCadastradoException;
-import com.sistemadecadastramento.infra.UsuarioNaoCadastradoException;
+import com.sistemadecadastramento.exceptions.CamposIncorretosException;
+import com.sistemadecadastramento.exceptions.UsuarioJaCadastradoException;
+import com.sistemadecadastramento.exceptions.UsuarioNaoCadastradoException;
 import com.sistemadecadastramento.models.Usuario;
 import com.sistemadecadastramento.repository.UsuarioRepository;
 

@@ -26,25 +26,25 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/usuarios")
+@RequestMapping("/api")
 public class UsuarioController {
     
     private final UsuarioService service;
 
-    @GetMapping("/listarTodos")
+    @GetMapping("/usuarios/listarTodos")
     public ResponseEntity<List<UsuarioResponseDto>> listarTodos(){
         List<UsuarioResponseDto> usuarios = service.listarTodos();
         
         return ResponseEntity.ok(usuarios);
     }
 
-    @GetMapping("/listarPorId/{id}")
+    @GetMapping("/usuarios/listarPorId/{id}")
     public ResponseEntity<UsuarioResponseDto> buscarPorId(@PathVariable Long id){
         UsuarioResponseDto dto = service.buscarPorId(id);
         return ResponseEntity.ok(dto);
     }
 
-    @PostMapping("/Cadastrar")
+    @PostMapping("/usuarios/Cadastrar")
     public ResponseEntity<UsuarioResponseDto> criarUsuario(@Valid @RequestBody UsuarioCreateRequestDto requestDto){
         
         Usuario usuarioSalvo = service.salvarCriar(service.transformarDto(requestDto));
@@ -59,15 +59,15 @@ public class UsuarioController {
         return ResponseEntity.created(uri).body(resposta);
     }
 
-    @PutMapping("/AtualizarCadastro/{id}")
-    public ResponseEntity<UsuarioResponseDto> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioRequestDto dto){
+    @PutMapping("/usuarios/AtualizarCadastro/{id}")
+    public ResponseEntity<UsuarioResponseDto> atualizarUsuario(@PathVariable Long id, @Valid @RequestBody UsuarioRequestDto dto){
 
         UsuarioResponseDto usuarioAtual = service.salvarAtualizar(id, dto);
 
         return ResponseEntity.ok(usuarioAtual);
     }
     
-    @DeleteMapping("/deletarUsuario")
+    @DeleteMapping("/usuarios/deletarUsuario")
     public ResponseEntity<Usuario> deletarUsuario(Long id){
         service.deletar(id);
 

@@ -1,4 +1,4 @@
-package com.sistemadecadastramento.infra;
+package com.sistemadecadastramento.exceptions;
 
 public class UsuarioJaCadastradoException extends RuntimeException{
 

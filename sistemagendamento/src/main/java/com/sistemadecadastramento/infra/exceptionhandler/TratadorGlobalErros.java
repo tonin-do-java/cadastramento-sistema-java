@@ -1,9 +1,13 @@
-package com.sistemadecadastramento.infra;
+package com.sistemadecadastramento.infra.exceptionhandler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import com.sistemadecadastramento.exceptions.CamposIncorretosException;
+import com.sistemadecadastramento.exceptions.UsuarioJaCadastradoException;
+import com.sistemadecadastramento.exceptions.UsuarioNaoCadastradoException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
