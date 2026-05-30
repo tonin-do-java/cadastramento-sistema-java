@@ -34,6 +34,13 @@ public class UsuarioService {
         return new UsuarioResponseDto(usuario);
     }
 
+    public Usuario buscarPorEmail(String email){
+        Usuario usuario = repository.findByEmail(email)
+        .orElseThrow(() -> new UsuarioNaoCadastradoException());
+
+        return usuario;
+    }
+
     public Usuario salvarCriar(Usuario usuario){
         if(repository.existsByEmail(usuario.getEmail())){
             throw new UsuarioJaCadastradoException();

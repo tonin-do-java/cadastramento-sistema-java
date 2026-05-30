@@ -1,11 +1,12 @@
 package com.sistemadecadastramento.dtos;
 
+
 import com.sistemadecadastramento.models.Usuario;
 
 import lombok.Getter;
 
 @Getter
-public class UsuarioResponseDto {
+public class UsuarioResponseDto{
     private Long id;
     private String nome;
     private String email;
