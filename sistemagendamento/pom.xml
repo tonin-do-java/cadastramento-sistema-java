@@ -22,6 +22,10 @@
         <lombok.version>1.18.30</lombok.version>
         <log4jdbc.log4j2.version>1.16</log4jdbc.log4j2.version>
         <rest.assured.version>2.3.3</rest.assured.version>
+        <java-jwt.version>4.4.0</java-jwt.version>
+        <jjwt-api.version>0.12.6</jjwt-api.version>
+        <jjwt-impl.version>0.12.6</jjwt-impl.version>
+        <jjwt-jackson.version>0.12.6</jjwt-jackson.version>
     </properties>
 
     <dependencies>
@@ -76,6 +80,28 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>${java-jwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${jjwt-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jjwt-impl.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jjwt-jackson.version}</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.jayway.restassured</groupId>
