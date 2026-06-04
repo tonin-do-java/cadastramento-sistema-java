@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,8 +40,14 @@ public class Usuario implements UserDetails{
     @Column(name = "senha", nullable = false)
     private String senhaHash;
 
+    @Enumerated(EnumType.STRING)
+    private Roles role;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        if(this.role == Roles.ADMIN){
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
