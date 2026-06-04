@@ -2,6 +2,7 @@ package com.sistemadecadastramento.services;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sistemadecadastramento.dtos.UsuarioCreateRequestDto;
@@ -10,6 +11,7 @@ import com.sistemadecadastramento.dtos.UsuarioResponseDto;
 import com.sistemadecadastramento.exceptions.CamposIncorretosException;
 import com.sistemadecadastramento.exceptions.UsuarioJaCadastradoException;
 import com.sistemadecadastramento.exceptions.UsuarioNaoCadastradoException;
+import com.sistemadecadastramento.models.Roles;
 import com.sistemadecadastramento.models.Usuario;
 import com.sistemadecadastramento.repository.UsuarioRepository;
 
@@ -20,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioService {
    
     private final UsuarioRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
 
     public List<UsuarioResponseDto> listarTodos(){
@@ -45,7 +48,13 @@ public class UsuarioService {
         if(repository.existsByEmail(usuario.getEmail())){
             throw new UsuarioJaCadastradoException();
         }
+
+        if(repository.count() == 0){
+            usuario.setRole(Roles.ADMIN);
+        }
         
+        usuario.setRole(Roles.USER);
+
         return repository.save(usuario);
     }
 
@@ -75,7 +84,7 @@ public class UsuarioService {
         if(!requestDto.getSenha().equals(requestDto.getConfirmacaoSenha())){
             throw new CamposIncorretosException();
         }
-        dadosUsuario.setSenhaHash(requestDto.getSenha());
+        dadosUsuario.setSenhaHash(passwordEncoder.encode(requestDto.getSenha()));
         return dadosUsuario;
     }
 }
