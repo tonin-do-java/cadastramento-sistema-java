@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UsuarioCreateRequestDto extends UsuarioRequestDto{
     @NotBlank(message = "A senha não pode estar vazia")
-    @Size(min = 6, message = "coloque no minimo 6 caracteres")
+    @Size(min = 8, message = "coloque no minimo 6 caracteres")
     private String senha;
 
     @NotBlank(message = "A confirmação da senha não pode estar vazia")
-    @Size(min = 6, message = "coloque no minimo 6 caracteres")
+    @Size(min = 8, message = "coloque no minimo 6 caracteres")
     private String confirmacaoSenha;
 }
