@@ -23,8 +23,7 @@ public class TokenService {
         SecretKey key = Keys.hmacShaKeyFor(chaveApi.getBytes());
 
         return Jwts.builder()
-                .subject(usuario.getId().toString())
-                .claim("email", usuario.getEmail())
+                .subject(usuario.getEmail())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 86400000L))
                 .signWith(key)
