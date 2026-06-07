@@ -2,7 +2,7 @@ package com.sistemadecadastramento.exceptions;
 
 public class CamposIncorretosException extends RuntimeException{
     public CamposIncorretosException(){
-        System.out.println("Os campos estão incorretos!");
+        super("Os campos estão incorretos!");
     }
 
     public CamposIncorretosException(String message) {
