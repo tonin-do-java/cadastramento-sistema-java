@@ -49,12 +49,6 @@ public class UsuarioService {
             throw new UsuarioJaCadastradoException();
         }
 
-        if(repository.count() == 0){
-            usuario.setRole(Roles.ADMIN);
-        }
-        
-        usuario.setRole(Roles.USER);
-
         return repository.save(usuario);
     }
 
@@ -84,6 +78,8 @@ public class UsuarioService {
         if(!requestDto.getSenha().equals(requestDto.getConfirmacaoSenha())){
             throw new CamposIncorretosException();
         }
+        Roles roleDefinida = (repository.count() == 0) ? Roles.ADMIN : Roles.USER;
+        dadosUsuario.setRole(roleDefinida);
         dadosUsuario.setSenhaHash(passwordEncoder.encode(requestDto.getSenha()));
         return dadosUsuario;
     }
