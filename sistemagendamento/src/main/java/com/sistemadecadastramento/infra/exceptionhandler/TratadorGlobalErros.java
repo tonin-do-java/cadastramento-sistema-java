@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.sistemadecadastramento.exceptions.CamposIncorretosException;
+import com.sistemadecadastramento.exceptions.CategoriaJaCadastradaException;
+import com.sistemadecadastramento.exceptions.CategoriaNaoEncontradaException;
 import com.sistemadecadastramento.exceptions.UsuarioJaCadastradoException;
 import com.sistemadecadastramento.exceptions.UsuarioNaoCadastradoException;
 
@@ -47,6 +49,28 @@ public class TratadorGlobalErros{
         );
 
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(erro);
+    }
+
+    @ExceptionHandler(CategoriaNaoEncontradaException.class)
+    public ResponseEntity<ErroResponse> tratarCategoriaInexistente(CategoriaNaoEncontradaException ex, HttpServletRequest request){
+        ErroResponse erro = new ErroResponse(
+            HttpStatus.NOT_FOUND.value(), 
+            ex.getMessage(), 
+            request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+    }
+
+    @ExceptionHandler(CategoriaJaCadastradaException.class)
+    public ResponseEntity<ErroResponse> tratarCategoriaCadastrada(CategoriaJaCadastradaException ex, HttpServletRequest request){
+        ErroResponse erro = new ErroResponse(
+            HttpStatus.CONFLICT.value(), 
+            ex.getMessage(), 
+            request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
     }
 }
 
