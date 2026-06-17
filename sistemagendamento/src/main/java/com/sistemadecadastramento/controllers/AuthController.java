@@ -18,7 +18,7 @@ import com.sistemadecadastramento.models.Usuario;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/api")
 public class AuthController {
     
     @Autowired
@@ -27,7 +27,7 @@ public class AuthController {
     @Autowired
     private TokenService tokenService;
 
-    @PostMapping
+    @PostMapping("/auth/login")
     public ResponseEntity<TokenResponseDto> efetuarLogin(@RequestBody @Valid DadosLoginDto dados){
         var tokenSpring = new UsernamePasswordAuthenticationToken(dados.getEmail(), dados.getSenha());
 

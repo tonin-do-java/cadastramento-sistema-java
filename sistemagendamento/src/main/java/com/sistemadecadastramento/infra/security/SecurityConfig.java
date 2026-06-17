@@ -28,8 +28,8 @@ public class SecurityConfig {
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html/**", "/swagger-ui/index.html#/**").permitAll()
-            .requestMatchers(HttpMethod.POST, "/api/usuarios/Cadastrar").permitAll()
-            .requestMatchers(HttpMethod.POST, "/login").permitAll()
+            .requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll()
+            .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
             .anyRequest().hasRole("ADMIN")
         )
         .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class); 
