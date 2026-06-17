@@ -20,12 +20,12 @@ public class Categoria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nome da Categoria", nullable = false)
+    @Column(name = "nome da Categoria", nullable = false, unique = true)
     private String nome;
 
     @Column(name = "descrição", nullable = false)
     private String descricao;
 
-    @Column(name = "Atividade", nullable = false)
+    @Column(name = "atividade", nullable = false)
     private boolean ativo;
 }
