@@ -64,8 +64,8 @@ public class CategoriaController {
     @PutMapping("/categoria/{id}/atividade")
     public ResponseEntity<CategoriaResponseDto> alterarAtividade(@PathVariable Long id){
 
-        service.alterarAtividade(id);
+        CategoriaResponseDto atividade = service.alterarAtividade(id);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(atividade);
     }
 }
