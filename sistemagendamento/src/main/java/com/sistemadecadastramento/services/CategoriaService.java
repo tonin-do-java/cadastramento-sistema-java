@@ -31,6 +31,13 @@ public class CategoriaService {
         return new CategoriaResponseDto(categoria);
     }
 
+    public Categoria buscarIdCategoria(Long id){
+        Categoria categoria = repository.findById(id)
+            .orElseThrow(() -> new CategoriaNaoEncontradaException());
+        
+        return categoria;
+    }
+
     public CategoriaResponseDto salvarCriar(CategoriaRequestDto dto){
         if(repository.existsByNome(dto.getNome())){
             throw new CategoriaJaCadastradaException();
@@ -52,9 +59,9 @@ public class CategoriaService {
         categoriaExistente.setNome(dto.getNome());
         categoriaExistente.setDescricao(dto.getDescricao());
 
-        Categoria categoria = repository.save(categoriaExistente);
+        repository.save(categoriaExistente);
 
-        return new CategoriaResponseDto(categoria);
+        return new CategoriaResponseDto(categoriaExistente);
     }
 
     public CategoriaResponseDto alterarAtividade(Long id){
@@ -62,8 +69,8 @@ public class CategoriaService {
 
         categoriaExistente.setAtivo(!categoriaExistente.isAtivo());
 
-        Categoria categoria = repository.save(categoriaExistente);
+        repository.save(categoriaExistente);
 
-        return new CategoriaResponseDto(categoria);
+        return new CategoriaResponseDto(categoriaExistente);
     }
 }
