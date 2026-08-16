@@ -38,6 +38,13 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
+    @GetMapping("/usuarios/perfil")
+    public ResponseEntity<UsuarioResponseDto> buscarMeuPerfil(){
+        UsuarioResponseDto usuarioLogado = service.buscarMeuPerfil();
+        
+        return ResponseEntity.ok(usuarioLogado);
+    }
+
     @GetMapping("/usuarios/{id}")
     public ResponseEntity<UsuarioResponseDto> buscarPorId(@PathVariable Long id){
         UsuarioResponseDto dto = service.buscarPorId(id);
@@ -65,6 +72,13 @@ public class UsuarioController {
         UsuarioResponseDto usuarioAtual = service.salvarAtualizar(id, dto);
 
         return ResponseEntity.ok(usuarioAtual);
+    }
+
+    @PutMapping("/usuarios/perfil")
+    public ResponseEntity<UsuarioResponseDto> alterarMeuPerfil(@Valid @RequestBody UsuarioRequestDto dto){
+        UsuarioResponseDto usuarioLogado = service.alterarMeuPerfil(dto);
+
+        return ResponseEntity.ok(usuarioLogado);
     }
     
     @DeleteMapping("/usuarios/{id}")
