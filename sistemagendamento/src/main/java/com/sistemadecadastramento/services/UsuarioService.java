@@ -2,9 +2,11 @@ package com.sistemadecadastramento.services;
 
 import java.util.List;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.sistemadecadastramento.dtos.SenhaRequestDto;
 import com.sistemadecadastramento.dtos.UsuarioCreateRequestDto;
 import com.sistemadecadastramento.dtos.UsuarioRequestDto;
 import com.sistemadecadastramento.dtos.UsuarioResponseDto;
@@ -58,6 +60,7 @@ public class UsuarioService {
 
         usuarioExistente.setNome(dto.getNome());
         usuarioExistente.setEmail(dto.getEmail());
+        usuarioExistente.setRole(dto.getRole());
 
         Usuario usuarioAtual = repository.save(usuarioExistente);
 
@@ -78,9 +81,46 @@ public class UsuarioService {
         if(!requestDto.getSenha().equals(requestDto.getConfirmacaoSenha())){
             throw new CamposIncorretosException();
         }
-        Roles roleDefinida = (repository.count() == 0) ? Roles.ADMIN : Roles.USER;
+        Roles roleDefinida = (repository.count() == 0) ? Roles.ADMIN : requestDto.getRole();
         dadosUsuario.setRole(roleDefinida);
         dadosUsuario.setSenhaHash(passwordEncoder.encode(requestDto.getSenha()));
         return dadosUsuario;
+    }
+
+    public void alterarSenha(SenhaRequestDto dto){
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        String emailUsuarioLogado = authentication.getName();
+
+        Usuario usuarioLogado = buscarPorEmail(emailUsuarioLogado);
+        if(!dto.getSenha().equals(dto.getConfirmacaoSenha())){
+            throw new CamposIncorretosException();
+        }
+
+        usuarioLogado.setSenhaHash(passwordEncoder.encode(dto.getSenha()));
+
+        repository.save(usuarioLogado);
+    }
+
+    public UsuarioResponseDto alterarMeuPerfil(UsuarioRequestDto dto){
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        String emailUsuarioLogado = authentication.getName();
+
+        Usuario usuarioLogado = buscarPorEmail(emailUsuarioLogado);
+
+        usuarioLogado.setNome(dto.getNome());
+        usuarioLogado.setEmail(dto.getEmail());
+
+        repository.save(usuarioLogado);
+
+        return new UsuarioResponseDto(usuarioLogado);
+    }
+
+    public UsuarioResponseDto buscarMeuPerfil(){
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        String emailUsuarioLogado = authentication.getName();
+
+        Usuario usuarioLogado = buscarPorEmail(emailUsuarioLogado);
+        
+        return new UsuarioResponseDto(usuarioLogado);
     }
 }
