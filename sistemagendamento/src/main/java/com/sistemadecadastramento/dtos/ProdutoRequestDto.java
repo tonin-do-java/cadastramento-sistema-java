@@ -48,6 +48,10 @@ public class ProdutoRequestDto {
     @Positive(message = "O estoque máximo tem que ser maior do que 0")
     private Integer estoqueMaximo;
 
-    private Boolean controlaLote = true;
-    private Boolean controlaValidade = true;
+    @NotNull(message = "esse valor não pode ficar em branco")
+    @Positive(message = "A quantidade tem que ser maior do que 0")
+    private Integer quantidadeAtual;
+
+    private Boolean controlaLote;
+    private Boolean controlaValidade;
 }
