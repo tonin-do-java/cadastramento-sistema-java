@@ -3,6 +3,7 @@ package com.sistemadecadastramento.models;
 public enum OrigemMovimentacao {
     COMPRA, 
     VENDA, 
-    PERDA_DE_ESTOQUE, 
-    BALANCO_AJUSTE
+    BALANCO_AJUSTE, 
+    DEVOLUCAO_CLIENTE, 
+    USO_INTERNO
 }
