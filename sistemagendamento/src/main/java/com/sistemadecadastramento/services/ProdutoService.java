@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.sistemadecadastramento.dtos.ProdutoRequestDto;
@@ -14,6 +15,7 @@ import com.sistemadecadastramento.exceptions.ProdutoNaoEncontradoException;
 import com.sistemadecadastramento.exceptions.ProdutoPrejuizoException;
 import com.sistemadecadastramento.models.Categoria;
 import com.sistemadecadastramento.models.Produto;
+import com.sistemadecadastramento.models.Usuario;
 import com.sistemadecadastramento.repository.ProdutoRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,8 @@ public class ProdutoService {
     
     private final ProdutoRepository repository;
     private final CategoriaService service;
+    private final UsuarioService usuarioService;
+
     private final BigDecimal cem = new BigDecimal("100");
 
     public List<ProdutoResponseDto> listarComFiltros(String nome, String codigo, Long categoriaId){
@@ -60,6 +64,11 @@ public class ProdutoService {
         
         Categoria categoriaExistente = service.buscarIdCategoria(dto.getCategoriaId());
 
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        String emailUsuarioLogado = authentication.getName();
+
+        Usuario usuarioLogado = usuarioService.buscarPorEmail(emailUsuarioLogado);
+
         if(categoriaExistente.isAtivo() == false){
             throw new CategoriaNaoEncontradaException("Essa categoria está desativada");
         }
@@ -78,6 +87,7 @@ public class ProdutoService {
         Produto produto = new Produto();
         produto.setCategoria(categoriaExistente);
         produto.setCodigo(dto.getCodigo());
+        produto.setUsuario(usuarioLogado);
         produto.setNome(dto.getNome());
         produto.setDescricao(dto.getDescricao());
         produto.setMarca(dto.getMarca());
@@ -87,6 +97,7 @@ public class ProdutoService {
         produto.setMargemLucro(margemCalculada);
         produto.setEstoqueMinimo(dto.getEstoqueMinimo());
         produto.setEstoqueMaximo(dto.getEstoqueMaximo());
+        produto.setQuantidadeAtual(dto.getQuantidadeAtual());
         produto.setControlaLote(dto.getControlaLote());
         produto.setControlaValidade(dto.getControlaValidade());
         produto.setAtivo(true);
@@ -103,6 +114,11 @@ public class ProdutoService {
 
         Categoria categoriaExistente = service.buscarIdCategoria(dto.getCategoriaId());
 
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        String emailUsuarioLogado = authentication.getName();
+
+        Usuario usuarioLogado = usuarioService.buscarPorEmail(emailUsuarioLogado);
+
         if(categoriaExistente.isAtivo() == false){
             throw new CategoriaNaoEncontradaException("Essa categoria está desativada");
         }
@@ -113,6 +129,7 @@ public class ProdutoService {
 
         produtoExistente.setCategoria(categoriaExistente);
         produtoExistente.setCodigo(dto.getCodigo());
+        produtoExistente.setUsuario(usuarioLogado);
         produtoExistente.setNome(dto.getNome());
         produtoExistente.setDescricao(dto.getDescricao());
         produtoExistente.setMarca(dto.getMarca());
