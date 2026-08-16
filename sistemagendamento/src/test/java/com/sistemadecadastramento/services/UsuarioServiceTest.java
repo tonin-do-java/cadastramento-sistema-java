@@ -66,7 +66,7 @@ public class UsuarioServiceTest {
     
         Usuario resultado = service.transformarDto(dto);
     
-        assertEquals(Roles.USER, resultado.getRole());
+        assertEquals(Roles.ESTOQUISTA, resultado.getRole());
         assertEquals("senha_criptografada", resultado.getSenhaHash());
     }
 
