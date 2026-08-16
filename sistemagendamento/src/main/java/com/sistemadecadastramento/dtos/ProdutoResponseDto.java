@@ -2,7 +2,6 @@ package com.sistemadecadastramento.dtos;
 
 import java.math.BigDecimal;
 
-import com.sistemadecadastramento.models.Categoria;
 import com.sistemadecadastramento.models.Produto;
 
 import lombok.Getter;
@@ -11,8 +10,8 @@ import lombok.Getter;
 public class ProdutoResponseDto {
     private Long id;
     private Long categoriaId;
+    private String nomeUsuario;
     private String codigo;
-    private String codigoBarras;
     private String nome;
     private String descricao;
     private String marca;
@@ -22,6 +21,7 @@ public class ProdutoResponseDto {
     private BigDecimal margemLucro;
     private Integer estoqueMinimo;
     private Integer estoqueMaximo;
+    private Integer quantidadeAtual;
     private Boolean controlaLote;
     private Boolean controlaValidade;
     private Boolean ativo;
@@ -29,8 +29,8 @@ public class ProdutoResponseDto {
     public ProdutoResponseDto(Produto produtoEntity) {
         this.id = produtoEntity.getId();
         this.categoriaId = produtoEntity.getCategoria().getId();
+        this.nomeUsuario = produtoEntity.getUsuario().getNome();
         this.codigo = produtoEntity.getCodigo();
-        this.codigoBarras = produtoEntity.getCodigoBarras();
         this.nome = produtoEntity.getNome();
         this.descricao = produtoEntity.getDescricao();
         this.marca = produtoEntity.getMarca();
@@ -40,6 +40,7 @@ public class ProdutoResponseDto {
         this.margemLucro = produtoEntity.getMargemLucro();
         this.estoqueMinimo = produtoEntity.getEstoqueMinimo();
         this.estoqueMaximo = produtoEntity.getEstoqueMaximo();
+        this.quantidadeAtual = produtoEntity.getQuantidadeAtual();
         this.controlaLote = produtoEntity.getControlaLote();
         this.controlaValidade = produtoEntity.getControlaValidade();
         this.ativo = produtoEntity.getAtivo();
