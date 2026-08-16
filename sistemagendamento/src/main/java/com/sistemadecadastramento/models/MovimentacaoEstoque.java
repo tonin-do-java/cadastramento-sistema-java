@@ -45,9 +45,9 @@ public class MovimentacaoEstoque {
     @Column(name = "data_hora", nullable = false)
     private LocalDateTime dataHora;
 
-    @Column(name = "validade", nullable = false)
+    @Column(name = "validade")
     private LocalDate validade;
 
-    @Column(name = "lote", nullable = false)
+    @Column(name = "lote")
     private String lote;
 }
