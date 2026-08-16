@@ -1,5 +1,7 @@
 package com.sistemadecadastramento.dtos;
 
+import com.sistemadecadastramento.models.Roles;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -16,4 +18,6 @@ public class UsuarioRequestDto {
     @NotBlank(message = "O Email não pode estar em branco")
     @Email(message = "Formato de Email inválido")
     private String email;
+
+    private Roles role;
 }
