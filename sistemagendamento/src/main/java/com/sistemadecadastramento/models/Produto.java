@@ -28,10 +28,14 @@ public class Produto {
     @JoinColumn(name = "categoria", nullable = false)
     private Categoria categoria;
 
+    @ManyToOne
+    @JoinColumn(name = "usuario", nullable = false)
+    private Usuario usuario;
+
     @Column(name = "codigo", nullable = false)
     private String codigo;
 
-    @Column(name = "codigo_barras", nullable = false)
+    @Column(name = "codigo_barras")
     private String codigoBarras;
 
     @Column(name = "nome", nullable = false)
@@ -44,7 +48,7 @@ public class Produto {
     private String marca;
 
     @Column(name = "unidade_medida", nullable = false)
-    private String UnidadeMedida;
+    private String unidadeMedida;
 
     @Column(name = "preco_custo", nullable = false)
     private BigDecimal precoCusto;
@@ -64,10 +68,10 @@ public class Produto {
     @Column(name = "quantidade_atual", nullable = false)
     private Integer quantidadeAtual = 0;
 
-    @Column(name = "controla_lote", nullable = false)
+    @Column(name = "controla_lote")
     private Boolean controlaLote;
 
-    @Column(name = "controla_validade", nullable = false)
+    @Column(name = "controla_validade")
     private Boolean controlaValidade;
 
     @Column(name = "ativo", nullable = false)
