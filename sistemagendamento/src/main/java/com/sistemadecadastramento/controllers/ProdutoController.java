@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +18,7 @@ import com.sistemadecadastramento.dtos.ProdutoRequestDto;
 import com.sistemadecadastramento.dtos.ProdutoResponseDto;
 import com.sistemadecadastramento.services.ProdutoService;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -43,7 +44,7 @@ public class ProdutoController {
     }
 
     @PostMapping("/produto")
-    public ResponseEntity<ProdutoResponseDto> criarProduto(@Valid @RequestBody ProdutoRequestDto requestDto){
+    public ResponseEntity<ProdutoResponseDto> criarProduto(@RequestBody @Valid ProdutoRequestDto requestDto){
         ProdutoResponseDto resposta = service.salvarCriar(requestDto);
 
         URI uri = ServletUriComponentsBuilder
