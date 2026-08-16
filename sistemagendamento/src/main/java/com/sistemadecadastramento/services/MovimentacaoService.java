@@ -26,10 +26,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class MovimentacaoService {
     
-    private MovimentacaoRepository repository;
-    private ProdutoRepository produtoRepository;
-    private ProdutoService produtoService;
-    private UsuarioService usuarioService;
+    private final MovimentacaoRepository repository;
+    private final ProdutoRepository produtoRepository;
+    private final ProdutoService produtoService;
+    private final UsuarioService usuarioService;
 
     public List<MovimentacaoResponseDto> listarHistorico(){
         List<MovimentacaoEstoque> movimentacoes = repository.findAll();
@@ -76,6 +76,7 @@ public class MovimentacaoService {
         novaMovimentacao.setDataHora(LocalDateTime.now());
         novaMovimentacao.setLote(dto.getLote());
         novaMovimentacao.setValidade(dto.getDataValidade());
+        novaMovimentacao.setQuantidade(dto.getQuantidade());
 
         repository.save(novaMovimentacao);
 
