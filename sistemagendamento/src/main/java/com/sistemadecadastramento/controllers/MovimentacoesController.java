@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -15,6 +16,7 @@ import com.sistemadecadastramento.dtos.MovimentacaoRequestDto;
 import com.sistemadecadastramento.dtos.MovimentacaoResponseDto;
 import com.sistemadecadastramento.services.MovimentacaoService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -39,7 +41,7 @@ public class MovimentacoesController {
     }
 
     @PostMapping("/movimentacao")
-    public ResponseEntity<MovimentacaoResponseDto> registrarHistorico(MovimentacaoRequestDto dto){
+    public ResponseEntity<MovimentacaoResponseDto> registrarHistorico(@RequestBody @Valid MovimentacaoRequestDto dto){
         MovimentacaoResponseDto resposta = service.registrarMovimentacao(dto);
 
         URI uri = ServletUriComponentsBuilder
