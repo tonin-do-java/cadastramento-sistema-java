@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 
 import Login from './pages/Home/Login';
-import Cadastro from './pages/Home/Cadastro';
 import Dashboard from './pages/Dashboard/Dashboard';
 import ProdutoManager from './pages/Produto/ProdutoManager'; 
 import CategoriaManager from './pages/Categoria/CategoriaManager'; 
@@ -22,7 +21,6 @@ function App() {
           <Route path="/" element={<Navigate to="/login" replace />} />
           
           <Route path="/login" element={<Login />} />
-          <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/produtos" element={<ProdutoManager />} />
           <Route path="/categorias" element={<CategoriaManager />} />
