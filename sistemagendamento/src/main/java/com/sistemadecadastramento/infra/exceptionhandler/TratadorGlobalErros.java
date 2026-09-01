@@ -9,6 +9,7 @@ import com.sistemadecadastramento.exceptions.CamposIncorretosException;
 import com.sistemadecadastramento.exceptions.CamposVaziosException;
 import com.sistemadecadastramento.exceptions.CategoriaJaCadastradaException;
 import com.sistemadecadastramento.exceptions.CategoriaNaoEncontradaException;
+import com.sistemadecadastramento.exceptions.NotificacaoNaoExistenteException;
 import com.sistemadecadastramento.exceptions.ProdutoJaCadastradoException;
 import com.sistemadecadastramento.exceptions.ProdutoNaoEncontradoException;
 import com.sistemadecadastramento.exceptions.ProdutoPrejuizoException;
@@ -149,6 +150,18 @@ public class TratadorGlobalErros{
         );
 
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(erro);
+    }
+
+    @ExceptionHandler(NotificacaoNaoExistenteException.class)
+    public ResponseEntity<ErroResponse> tratarNotificacaoInexistente(NotificacaoNaoExistenteException ex, HttpServletRequest request){
+
+        ErroResponse erro = new ErroResponse(
+            HttpStatus.NOT_FOUND.value(), 
+            ex.getMessage(), 
+            request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
     }
 
 }
