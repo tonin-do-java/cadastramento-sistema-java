@@ -12,6 +12,7 @@ import Perfil from './pages/Perfil/Perfil'
 import Layout from './pages/Layout/Layout'
 import PreferenciaManager from './pages/Preferencias/PreferenciasManager';
 import AlteraSenhaManager from './pages/AlteraSenha/AlteraSenhaManager';
+import Notificacao from './pages/Notificacao/Notificacao';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/perfil" element={<Layout><Perfil /></Layout>} />
           <Route path="/preferencias" element={<Layout><PreferenciaManager /></Layout>} />
           <Route path="/alteraSenha" element={<Layout><AlteraSenhaManager /></Layout>} />
+          <Route path="/notificacoes" element={<Layout><Notificacao /></Layout>} />
 
         </Routes>
       </div>

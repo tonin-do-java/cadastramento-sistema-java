@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import SinoNotificacao from '../Notificacao/SinoNotificacao';
 
 const Layout = ({ children }) => {
   const location = useLocation();
@@ -93,7 +94,7 @@ const Layout = ({ children }) => {
         
         {/* ===== CABEÇALHO (HEADER) ===== */}
         <header style={{ backgroundColor: '#fff', padding: '15px 30px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
-          <div style={{ marginRight: '30px', cursor: 'pointer', fontSize: '18px' }}>🔔 Notificações</div>
+          <div style={{ marginRight: '30px' }}><SinoNotificacao /></div>
           
           <div style={{ position: 'relative' }}>
             <div 
