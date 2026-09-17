@@ -4,9 +4,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.sistemadecadastramento.dtos.EstoqueBaixoEvent;
 import com.sistemadecadastramento.dtos.MovimentacaoRequestDto;
 import com.sistemadecadastramento.dtos.MovimentacaoResponseDto;
 import com.sistemadecadastramento.exceptions.CamposVaziosException;
@@ -30,6 +33,7 @@ public class MovimentacaoService {
     private final ProdutoRepository produtoRepository;
     private final ProdutoService produtoService;
     private final UsuarioService usuarioService;
+    private final ApplicationEventPublisher eventPublisher;
 
     public List<MovimentacaoResponseDto> listarHistorico(){
         List<MovimentacaoEstoque> movimentacoes = repository.findAll();
@@ -47,6 +51,13 @@ public class MovimentacaoService {
         return movimentacoes.stream().map(movimentacao -> new MovimentacaoResponseDto(movimentacao)).toList();
     }
 
+    public List<MovimentacaoEstoque> buscarLotesAVencer(LocalDate hoje, LocalDate limite){
+        List<MovimentacaoEstoque> lotes = repository.findByValidadeBetween(hoje, limite);
+
+        return lotes;
+    }
+
+    @Transactional
     public MovimentacaoResponseDto registrarMovimentacao(MovimentacaoRequestDto dto){
         Produto produto = produtoService.buscarId(dto.getProdutoId());
 
@@ -69,6 +80,7 @@ public class MovimentacaoService {
         produtoRepository.save(produto);
 
         MovimentacaoEstoque novaMovimentacao = new MovimentacaoEstoque();
+        verificarEstoqueMinimo(produto, novaMovimentacao.getId());
         novaMovimentacao.setProduto(produto);
         novaMovimentacao.setUsuario(usuarioLogado);
         novaMovimentacao.setTipoMovimentacao(dto.getTipo());
@@ -79,6 +91,7 @@ public class MovimentacaoService {
         novaMovimentacao.setQuantidade(dto.getQuantidade());
 
         repository.save(novaMovimentacao);
+
 
         return new MovimentacaoResponseDto(novaMovimentacao);
     }
@@ -92,6 +105,12 @@ public class MovimentacaoService {
         }
         if(dto.getDataValidade() != null && dto.getDataValidade().isBefore(LocalDate.now())){
             throw new ValidadeVencidaException();
+        }
+    }
+
+    private void verificarEstoqueMinimo(Produto produto, Long id){
+        if(produto.getQuantidadeAtual() <= produto.getEstoqueMinimo()){
+            eventPublisher.publishEvent(new EstoqueBaixoEvent(produto, id));
         }
     }
 }

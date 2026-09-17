@@ -1,5 +1,6 @@
 package com.sistemadecadastramento.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +11,5 @@ import com.sistemadecadastramento.models.MovimentacaoEstoque;
 @Repository
 public interface MovimentacaoRepository extends JpaRepository<MovimentacaoEstoque, Long> {
     List<MovimentacaoEstoque> findByProdutoIdOrderByDataHoraDesc(Long id);
+    List<MovimentacaoEstoque> findByValidadeBetween(LocalDate hoje, LocalDate limite);
 }
