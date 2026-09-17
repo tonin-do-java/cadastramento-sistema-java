@@ -19,6 +19,9 @@ public class NotificacaoRequestDto {
     @NotBlank(message = "o título precisa ser preenchido")
     private String titulo;
 
+    @NotNull(message = "precisa saber qual é a referência")
+    private Long idReferencia;
+
     @NotBlank(message = "o texto precisa ser preenchido")
     private String texto;
 

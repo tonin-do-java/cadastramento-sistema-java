@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class NotificacaoController {
     
-    private NotificacaoService service;
+    private final NotificacaoService service;
 
     @GetMapping("/notificacoes")
     public ResponseEntity<List<NotificacaoResponseDto>> listarTodos(){

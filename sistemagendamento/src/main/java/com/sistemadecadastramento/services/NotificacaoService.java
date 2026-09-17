@@ -51,6 +51,7 @@ public class NotificacaoService {
         notificacao.setTitulo(dto.getTitulo());
         notificacao.setTexto(dto.getTexto());
         notificacao.setLida(false);
+        notificacao.setIdReferencia(dto.getIdReferencia());
         notificacao.setDataHora(LocalDateTime.now());
         notificacao.setTipoNotificacao(dto.getTipoNotificacao());
 

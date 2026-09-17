@@ -34,6 +34,9 @@ public class Notificacao {
     @Column(name = "dataHora", nullable = false)
     private LocalDateTime dataHora;
 
+    @Column(name = "id_referencia", nullable = false)
+    private Long idReferencia;
+    
     @Column(name = "lida", nullable = false)
     private Boolean lida;
 
