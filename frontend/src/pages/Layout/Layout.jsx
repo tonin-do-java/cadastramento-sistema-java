@@ -62,7 +62,8 @@ const Layout = ({ children }) => {
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             <li style={isActive('/dashboard') ? styles.navItemActive : styles.navItem} onClick={() => navigate('/dashboard')}>🏠 Dashboard</li>
             
-            {/* Item Estoque com Dropdown */}
+            <li style={isActive('/clientes') ? styles.navItemActive : styles.navItem} onClick={() => navigate('/clientes')}>👥 Clientes</li>
+
             <li 
               style={{ ...styles.navItem, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} 
               onClick={() => setEstoqueAberto(!estoqueAberto)}
@@ -73,7 +74,6 @@ const Layout = ({ children }) => {
               </span>
             </li>
             
-            {/* Renderização Condicional dos Sub-itens */}
             {estoqueAberto && (
               <ul style={{ listStyle: 'none', paddingLeft: '40px', margin: '5px 0 15px 0' }}>
                 <li style={isActive('/produtos') ? styles.subNavItemActive : styles.subNavItem} onClick={() => navigate('/produtos')}>📦 Produtos</li>

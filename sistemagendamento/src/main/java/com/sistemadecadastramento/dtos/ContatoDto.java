@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ContatoDto {
     
-    @Pattern(regexp = "/^[1-9]{2}[0-9]{8}$/")
+    @Pattern(regexp = "^$|^[1-9]{2}\\d{4}-?\\d{4}$")
     private String telefone;
     
     @NotBlank(message = "numero de celular é obrigatório")
-    @Pattern(regexp = "/^[1-9]{2}9[0-9]{8}$/")
+    @Pattern(regexp = "^[1-9]{2}9\\d{4}-?\\d{4}$")
     private String celular;
     
     @Email(message = "O formato de Email é inválido")

@@ -3,6 +3,7 @@ package com.sistemadecadastramento.dtos;
 import com.sistemadecadastramento.infra.config.CpfOuCnpjValido;
 import com.sistemadecadastramento.models.TipoPessoa;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -29,5 +30,11 @@ public class ClienteRequestDto {
 
     @Pattern(regexp = "^1[01]\\.\\d{3}\\.\\d{3}-\\d$")
     private String inscricaoEstadual;
+
+    @Valid
+    private EnderecoDto endereco;
+
+    @Valid
+    private ContatoDto contato;
 
 }

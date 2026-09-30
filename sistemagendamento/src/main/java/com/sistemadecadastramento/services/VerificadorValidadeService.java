@@ -25,8 +25,8 @@ public class VerificadorValidadeService {
     private final ApplicationEventPublisher eventPublisher;
     private final NotificacaoRepository repository;
 
-    //@Scheduled(cron = "0 0 8 * * *", zone = "America/Sao_Paulo")//
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(cron = "0 0 8 * * *", zone = "America/Sao_Paulo")
+    //@Scheduled(fixedRate = 10000)//
     @Transactional
     public void verificarValidadesProximas(){
         LocalDate hoje = LocalDate.now();

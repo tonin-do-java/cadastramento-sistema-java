@@ -13,6 +13,9 @@ import Layout from './pages/Layout/Layout'
 import PreferenciaManager from './pages/Preferencias/PreferenciasManager';
 import AlteraSenhaManager from './pages/AlteraSenha/AlteraSenhaManager';
 import Notificacao from './pages/Notificacao/Notificacao';
+import ClientesList from './pages/Cliente/ClientesList';
+import ClienteForm from './pages/Cliente/ClienteForm';
+import ClienteDetalhes from './pages/Cliente/ClienteDetalhes';
 
 function App() {
   return (
@@ -31,6 +34,10 @@ function App() {
           <Route path="/preferencias" element={<Layout><PreferenciaManager /></Layout>} />
           <Route path="/alteraSenha" element={<Layout><AlteraSenhaManager /></Layout>} />
           <Route path="/notificacoes" element={<Layout><Notificacao /></Layout>} />
+          <Route path="/clientes" element={<ClientesList />} />
+          <Route path="/clientes/novo" element={<ClienteForm />} />
+          <Route path="/clientes/editar/:id" element={<ClienteForm />} />
+          <Route path="/clientes/:id" element={<ClienteDetalhes />} />
 
         </Routes>
       </div>

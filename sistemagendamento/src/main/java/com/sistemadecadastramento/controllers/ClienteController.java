@@ -17,8 +17,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.sistemadecadastramento.dtos.ClienteResponseDto;
 import com.sistemadecadastramento.dtos.ClienteRequestDto;
-import com.sistemadecadastramento.dtos.EnderecoDto;
-import com.sistemadecadastramento.dtos.ContatoDto;
 import com.sistemadecadastramento.models.TipoPessoa;
 import com.sistemadecadastramento.services.ClienteService;
 
@@ -47,8 +45,8 @@ public class ClienteController {
     }
 
     @PostMapping("/cliente")
-    public ResponseEntity<ClienteResponseDto> criarCliente(@Valid @RequestBody ClienteRequestDto dto, @Valid @RequestBody EnderecoDto end, @Valid @RequestBody ContatoDto cont){
-        ClienteResponseDto resposta = service.salvarCriar(dto, end, cont);
+    public ResponseEntity<ClienteResponseDto> criarCliente(@Valid @RequestBody ClienteRequestDto dto){
+        ClienteResponseDto resposta = service.salvarCriar(dto);
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -60,8 +58,8 @@ public class ClienteController {
     }
 
     @PutMapping("/cliente/{id}")
-    public ResponseEntity<ClienteResponseDto> atualizarCliente(@PathVariable Long id, @Valid @RequestBody ClienteRequestDto dto, @Valid @RequestBody EnderecoDto end, @Valid @RequestBody ContatoDto cont){
-        ClienteResponseDto clienteAtualizado = service.salvarAtualizar(id, dto, end, cont);
+    public ResponseEntity<ClienteResponseDto> atualizarCliente(@PathVariable Long id, @Valid @RequestBody ClienteRequestDto dto){
+        ClienteResponseDto clienteAtualizado = service.salvarAtualizar(id, dto);
 
         return ResponseEntity.ok(clienteAtualizado);
     }

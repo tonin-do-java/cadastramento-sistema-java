@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import io.jsonwebtoken.JwtException;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -30,18 +31,22 @@ public class SecurityFilter extends OncePerRequestFilter{
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-                
+
                 var token = recuperarToken(request);
 
                 if(token != null){
-                    var subject = tokenService.validarToken(token);
+                    try {
+                        var subject = tokenService.validarToken(token);
 
-                    if(subject != null){
-                        UserDetails usuario = autenticacaoService.loadUserByUsername(subject);
+                        if(subject != null){
+                            UserDetails usuario = autenticacaoService.loadUserByUsername(subject);
 
-                        var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
+                            var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
 
-                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                            SecurityContextHolder.getContext().setAuthentication(authentication);
+                        }
+                    } catch (JwtException e) {
+                        SecurityContextHolder.clearContext();
                     }
                 }
                 filterChain.doFilter(request, response);
@@ -50,7 +55,8 @@ public class SecurityFilter extends OncePerRequestFilter{
     private String recuperarToken(HttpServletRequest request){
         var authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null){
-            return authorizationHeader.replace("Bearer ", "").trim();
+            String token = authorizationHeader.replace("Bearer ", "").trim();
+            return token.isEmpty() ? null : token;
         }
         return null;
     }

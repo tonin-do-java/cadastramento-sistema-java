@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class EnderecoDto {
 
     @NotBlank(message = "é obrigatório ter CEP")
-    @Pattern(regexp = "\\d{5} - d{3}")
+    @Pattern(regexp = "\\d{5}-\\d{3}")
     private String cep;
 
     @NotBlank(message = "é obrigatório ter um logradouro")

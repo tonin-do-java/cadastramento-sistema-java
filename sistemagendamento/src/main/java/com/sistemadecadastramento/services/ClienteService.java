@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.sistemadecadastramento.dtos.ClienteResponseDto;
 import com.sistemadecadastramento.dtos.ClienteRequestDto;
-import com.sistemadecadastramento.dtos.ContatoDto;
-import com.sistemadecadastramento.dtos.EnderecoDto;
 import com.sistemadecadastramento.exceptions.UsuarioJaCadastradoException;
 import com.sistemadecadastramento.exceptions.UsuarioNaoCadastradoException;
 import com.sistemadecadastramento.models.Cliente;
@@ -47,14 +45,10 @@ public class ClienteService {
         return new ClienteResponseDto(cliente);
     }
 
-    public ClienteResponseDto salvarCriar(ClienteRequestDto dto, EnderecoDto end, ContatoDto cont){
+    public ClienteResponseDto salvarCriar(ClienteRequestDto dto){
         if(repository.existsByDocumento(dto.getDocumento())){
             throw new UsuarioJaCadastradoException("Esse cliente já está cadastrado");
         }
-
-        Endereco endereco = new Endereco(end.getCep(), end.getLogradouro(), end.getNumero(), end.getBairro(), end.getCidade(), end.getEstado());
-
-        Contato contato = new Contato(cont.getTelefone(), cont.getCelular(), cont.getEmail());
 
         Cliente cliente = new Cliente();
 
@@ -63,8 +57,16 @@ public class ClienteService {
         cliente.setDocumento(dto.getDocumento());
         cliente.setNomeFantasia(dto.getNomeFantasia());
         cliente.setInscricaoEstadual(dto.getInscricaoEstadual());
-        cliente.setEndereco(endereco);
-        cliente.setContato(contato);
+        
+        if (dto.getEndereco() != null) {
+            Endereco endereco = new Endereco(dto.getEndereco().getCep(), dto.getEndereco().getLogradouro(), dto.getEndereco().getNumero(), dto.getEndereco().getBairro(), dto.getEndereco().getCidade(), dto.getEndereco().getEstado());
+            cliente.setEndereco(endereco);
+        }
+
+        if (dto.getContato() != null) {
+            Contato contato = new Contato(dto.getContato().getTelefone(), dto.getContato().getCelular(), dto.getContato().getEmail()); 
+            cliente.setContato(contato);
+        }
         cliente.setAtivo(true);
         cliente.setDataCadastro(LocalDate.now());
         cliente.setDataAtualizacao(LocalDate.now());
@@ -74,21 +76,24 @@ public class ClienteService {
         return new ClienteResponseDto(cliente);
     }
 
-    public ClienteResponseDto salvarAtualizar(Long id, ClienteRequestDto dto, EnderecoDto end, ContatoDto cont){
+    public ClienteResponseDto salvarAtualizar(Long id, ClienteRequestDto dto){
         Cliente clienteExistente = repository.findById(id)
         .orElseThrow(() -> new UsuarioNaoCadastradoException("Esse cliente não existe"));
-
-        Endereco endereco = new Endereco(end.getCep(), end.getLogradouro(), end.getNumero(), end.getBairro(), end.getCidade(), end.getEstado());
-
-        Contato contato = new Contato(cont.getTelefone(), cont.getCelular(), cont.getEmail());
 
         clienteExistente.setNome(dto.getNome());
         clienteExistente.setTipoPessoa(dto.getTipoPessoa());
         clienteExistente.setDocumento(dto.getDocumento());
         clienteExistente.setNomeFantasia(dto.getNomeFantasia());
         clienteExistente.setInscricaoEstadual(dto.getInscricaoEstadual());
-        clienteExistente.setEndereco(endereco);
-        clienteExistente.setContato(contato);
+        if (dto.getEndereco() != null) {
+            Endereco endereco = new Endereco(dto.getEndereco().getCep(), dto.getEndereco().getLogradouro(), dto.getEndereco().getNumero(), dto.getEndereco().getBairro(), dto.getEndereco().getCidade(), dto.getEndereco().getEstado());
+            clienteExistente.setEndereco(endereco);
+        }
+
+        if (dto.getContato() != null) {
+            Contato contato = new Contato(dto.getContato().getTelefone(), dto.getContato().getCelular(), dto.getContato().getEmail()); 
+            clienteExistente.setContato(contato);
+        }
         clienteExistente.setAtivo(true);
         clienteExistente.setDataAtualizacao(LocalDate.now());
 
