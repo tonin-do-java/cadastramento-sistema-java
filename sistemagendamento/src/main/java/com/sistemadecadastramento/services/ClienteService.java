@@ -38,11 +38,11 @@ public class ClienteService {
         return clientes.stream().map(cliente -> new ClienteResponseDto(cliente)).toList();
     }
 
-    public ClienteResponseDto buscarPorId(Long id){
+    public Cliente buscarPorId(Long id){
         Cliente cliente = repository.findById(id)
         .orElseThrow(() -> new UsuarioNaoCadastradoException("Esse cliente não existe"));
 
-        return new ClienteResponseDto(cliente);
+        return cliente;
     }
 
     public ClienteResponseDto salvarCriar(ClienteRequestDto dto){
