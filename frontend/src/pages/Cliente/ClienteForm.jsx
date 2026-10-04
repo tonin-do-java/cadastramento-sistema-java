@@ -22,10 +22,6 @@ const ClienteForm = () => {
     bairro: '',
     cidade: '',
     estado: 'GO',
-    limiteCredito: '',
-    formaPagamento: 'À Vista',
-    prazoPagamento: '30 dias',
-    observacoes: ''
   });
 
   useEffect(() => {
@@ -62,10 +58,6 @@ const ClienteForm = () => {
           bairro: data.endereco?.bairro || '',
           cidade: data.endereco?.cidade || '',
           estado: data.endereco?.estado || 'GO',
-          limiteCredito: '',
-          formaPagamento: 'À Vista',
-          prazoPagamento: '30 dias',
-          observacoes: ''
         });
       }
     } catch (error) {
@@ -269,46 +261,7 @@ const ClienteForm = () => {
           </div>
         </div>
 
-        {/* INFORMAÇÕES COMERCIAIS */}
         <div style={styles.card}>
-          <div style={styles.sectionHeader}>INFORMAÇÕES COMERCIAIS</div>
-
-          <div style={styles.row}>
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Limite de Crédito</label>
-              <input style={styles.input} type="text" name="limiteCredito" value={formData.limiteCredito} onChange={handleChange} placeholder="R$ 0,00" />
-            </div>
-          </div>
-
-          <div style={styles.row}>
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Forma de Pagamento</label>
-              <select style={styles.select} name="formaPagamento" value={formData.formaPagamento} onChange={handleChange}>
-                <option value="À Vista">À Vista</option>
-                <option value="Boleto">Boleto</option>
-                <option value="Pix">Pix</option>
-                <option value="Cartão de Crédito">Cartão de Crédito</option>
-              </select>
-            </div>
-          </div>
-
-          <div style={styles.row}>
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Prazo de Pagamento</label>
-              <select style={styles.select} name="prazoPagamento" value={formData.prazoPagamento} onChange={handleChange}>
-                <option value="30 dias">30 dias</option>
-                <option value="15 dias">15 dias</option>
-                <option value="45 dias">45 dias</option>
-              </select>
-            </div>
-          </div>
-
-          <div style={styles.row}>
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Observações</label>
-              <input style={styles.input} type="text" name="observacoes" value={formData.observacoes} onChange={handleChange} />
-            </div>
-          </div>
 
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
             <button type="button" style={styles.btnCancel} onClick={() => navigate('/clientes')}>Cancelar</button>
