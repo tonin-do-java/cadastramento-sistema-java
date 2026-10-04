@@ -32,11 +32,11 @@ public class UsuarioService {
         return usuarios.stream().map(usuario -> new UsuarioResponseDto(usuario)).toList();
     }
 
-    public UsuarioResponseDto buscarPorId(Long id){
+    public Usuario buscarPorId(Long id){
         Usuario usuario = repository.findById(id)
         .orElseThrow(() -> new UsuarioNaoCadastradoException());
 
-        return new UsuarioResponseDto(usuario);
+        return usuario;
     }
 
     public Usuario buscarPorEmail(String email){
