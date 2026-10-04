@@ -17,6 +17,7 @@ import com.sistemadecadastramento.exceptions.SaldoInsuficienteException;
 import com.sistemadecadastramento.exceptions.UsuarioJaCadastradoException;
 import com.sistemadecadastramento.exceptions.UsuarioNaoCadastradoException;
 import com.sistemadecadastramento.exceptions.ValidadeVencidaException;
+import com.sistemadecadastramento.exceptions.VendaNaoEncontradaException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -155,6 +156,18 @@ public class TratadorGlobalErros{
     @ExceptionHandler(NotificacaoNaoExistenteException.class)
     public ResponseEntity<ErroResponse> tratarNotificacaoInexistente(NotificacaoNaoExistenteException ex, HttpServletRequest request){
 
+        ErroResponse erro = new ErroResponse(
+            HttpStatus.NOT_FOUND.value(), 
+            ex.getMessage(), 
+            request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+    }
+
+    @ExceptionHandler(VendaNaoEncontradaException.class)
+    public ResponseEntity<ErroResponse> tratarVendaInexistente(VendaNaoEncontradaException ex, HttpServletRequest request){
+        
         ErroResponse erro = new ErroResponse(
             HttpStatus.NOT_FOUND.value(), 
             ex.getMessage(), 
