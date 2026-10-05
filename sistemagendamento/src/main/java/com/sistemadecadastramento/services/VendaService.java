@@ -32,7 +32,7 @@ public class VendaService {
         if(status != null){
             vendas = repository.findByStatus(status);
         } else if(dataHora != null){
-            vendas = repository.findByDataHoraDesc(dataHora);
+            vendas = repository.findByDataHora(dataHora);
         } else if(clienteId != null) {
             vendas = repository.findByClienteId(clienteId);
         } else{

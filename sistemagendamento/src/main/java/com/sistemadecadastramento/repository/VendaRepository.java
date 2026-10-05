@@ -12,6 +12,6 @@ import com.sistemadecadastramento.models.Venda;
 @Repository 
 public interface VendaRepository extends JpaRepository<Venda, Long>{
     List<Venda> findByStatus(Status status);
-    List<Venda> findByDataHoraDesc(LocalDateTime dataHora);
+    List<Venda> findByDataHora(LocalDateTime dataHora);
     List<Venda> findByClienteId(Long clienteId);
 }
