@@ -16,6 +16,9 @@ import Notificacao from './pages/Notificacao/Notificacao';
 import ClientesList from './pages/Cliente/ClientesList';
 import ClienteForm from './pages/Cliente/ClienteForm';
 import ClienteDetalhes from './pages/Cliente/ClienteDetalhes';
+import VendaDetalhes from './pages/Vendas/VendaDetalhes';
+import VendaForm from './pages/Vendas/VendaForm';
+import VendaList from './pages/Vendas/VendaList';
 
 function App() {
   return (
@@ -34,10 +37,15 @@ function App() {
           <Route path="/preferencias" element={<Layout><PreferenciaManager /></Layout>} />
           <Route path="/alteraSenha" element={<Layout><AlteraSenhaManager /></Layout>} />
           <Route path="/notificacoes" element={<Layout><Notificacao /></Layout>} />
+          
           <Route path="/clientes" element={<ClientesList />} />
           <Route path="/clientes/novo" element={<ClienteForm />} />
           <Route path="/clientes/editar/:id" element={<ClienteForm />} />
           <Route path="/clientes/:id" element={<ClienteDetalhes />} />
+          
+          <Route path="/vendas" element={<VendaList />} />
+          <Route path="/vendas/nova" element={<VendaForm />} />
+          <Route path="/vendas/:id" element={<VendaDetalhes />} />
 
         </Routes>
       </div>
