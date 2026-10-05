@@ -64,6 +64,8 @@ const Layout = ({ children }) => {
             
             <li style={isActive('/clientes') ? styles.navItemActive : styles.navItem} onClick={() => navigate('/clientes')}>👥 Clientes</li>
 
+            <li style={isActive('/vendas') ? styles.navItemActive : styles.navItem} onClick={() => navigate('/vendas')}>🛒 Vendas</li>
+
             <li 
               style={{ ...styles.navItem, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} 
               onClick={() => setEstoqueAberto(!estoqueAberto)}
