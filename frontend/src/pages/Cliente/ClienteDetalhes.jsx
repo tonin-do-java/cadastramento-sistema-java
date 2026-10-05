@@ -14,7 +14,12 @@ const ClienteDetalhes = () => {
 
   const carregarCliente = async () => {
     try {
-      const response = await fetch(`/api/cliente/${id}`);
+      const token = localStorage.getItem('tokenJWT');
+      const response = await fetch(`/api/cliente/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       if (response.ok) {
         const data = await response.json();
         setCliente(data);
