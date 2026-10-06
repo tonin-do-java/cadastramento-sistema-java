@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Layout from '../../components/Layout/Layout';
+import Layout from '../../pages/Layout/Layout.jsx';
 
 const VendaForm = () => {
   const navigate = useNavigate();
@@ -22,20 +22,21 @@ const VendaForm = () => {
   const [produtoSelecionado, setProdutoSelecionado] = useState(null);
   const [qtdItem, setQtdItem] = useState(1);
   const [descontoItem, setDescontoItem] = useState(0);
+  
   const token = localStorage.getItem('tokenJWT');
   
   const headers = {
     'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`
-};
+    'Authorization': `Bearer ${token}` 
+  };
 
   useEffect(() => {
     const carregarDados = async () => {
       try {
-        const resClientes = await fetch('/api/clientes', { headers });
+        const resClientes = await fetch('/api/cliente', { headers });
         if (resClientes.ok) setClientes(await resClientes.json());
 
-        const resProdutos = await fetch('/api/produtos', { headers });
+        const resProdutos = await fetch('/api/produto', { headers });
         if (resProdutos.ok) setProdutos(await resProdutos.json());
       } catch (err) {
         console.error('Erro ao carregar dados auxiliares:', err);
@@ -102,9 +103,9 @@ const VendaForm = () => {
     };
 
     try {
-      const res = await fetch('/api/vendas', {
-        method: 'POST',
-        headers,
+      const res = await fetch('/api/vendas', { 
+        method: 'POST', 
+        headers, 
         body: JSON.stringify(payload)
       });
 

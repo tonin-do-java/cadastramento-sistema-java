@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Layout from '../../components/Layout/Layout';
+import Layout from '../../pages/Layout/Layout.jsx';
 
 const VendaList = () => {
   const navigate = useNavigate();
