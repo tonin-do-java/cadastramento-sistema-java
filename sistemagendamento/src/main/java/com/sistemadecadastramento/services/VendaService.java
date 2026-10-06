@@ -74,10 +74,16 @@ public class VendaService {
             itemReal.setPrecoUnitario(precoUnitario);
             itemReal.setDesconto(itemDto.getDesconto());
             itemReal.setSubtotal(calculoSub);
+            venda.setValorSubtotal(calculoSub);
             
             venda.adicionarItem(itemReal);
         }
 
+        BigDecimal desconto = dto.getDesconto();
+        BigDecimal calculoTotal = venda.getValorSubtotal().subtract(desconto);
+
+        venda.setValorTotal(calculoTotal);
+        
         repository.save(venda);
 
         return new VendaResponseDto(venda);
