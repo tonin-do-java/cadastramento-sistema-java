@@ -58,8 +58,11 @@ public class VendaService {
         venda.setVendedor(usuarioService.buscarPorId(dto.getVendedorId()));
         venda.setStatus(dto.getStatus());
         venda.setFormaPagamento(dto.getFormaPagamento());
-        venda.setDesconto(dto.getDesconto());
+        BigDecimal descontoVenda = dto.getDesconto() != null ? dto.getDesconto() : BigDecimal.ZERO;
+        venda.setDesconto(descontoVenda);
         venda.setObservacao(dto.getObservacao());
+
+        BigDecimal valorSubtotalAcumulado = BigDecimal.ZERO;
         
         for(ItemVendaRequestDto itemDto : dto.getItens()){
             ItemVenda itemReal = new ItemVenda();
@@ -67,22 +70,23 @@ public class VendaService {
             BigDecimal precoUnitario = produtoService.buscarId(itemDto.getProdutoId()).getPrecoVenda();
 
             BigDecimal calculoSub = precoUnitario.multiply(BigDecimal.valueOf(itemDto.getQuantidade())).subtract(itemDto.getDesconto());
-            
-        
+
             itemReal.setProduto(produtoService.buscarId(itemDto.getProdutoId()));
             itemReal.setQuantidade(itemDto.getQuantidade());
             itemReal.setPrecoUnitario(precoUnitario);
-            itemReal.setDesconto(itemDto.getDesconto());
+            if(itemDto.getDesconto != null){
+                itemReal.setDesconto(itemDto.getDesconto());
+            }
+            itemReal.setDesconto(BigDecimal.ZERO);
             itemReal.setSubtotal(calculoSub);
-            venda.setValorSubtotal(calculoSub);
+            valorSubtotalAcumulado = valorSubtotalAcumulado.add(calculoSub);
             
             venda.adicionarItem(itemReal);
         }
 
-        BigDecimal desconto = dto.getDesconto();
-        BigDecimal calculoTotal = venda.getValorSubtotal().subtract(desconto);
+        venda.setValorSubtotal(valorSubtotalAcumulado);
 
-        venda.setValorTotal(calculoTotal);
+        venda.setValorTotal(valorSubtotalAcumulado.subtract(descontoVenda));
         
         repository.save(venda);
 

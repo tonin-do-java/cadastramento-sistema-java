@@ -49,13 +49,17 @@ const VendaForm = () => {
   const handleAdicionarItem = () => {
     if (!produtoSelecionado) return;
 
+    const qtd = parseInt(qtdItem, 10) || 1;
+    const desc = parseFloat(descontoItem) || 0;
+    const preco = produtoSelecionado.precoVenda || 0;
+
     const novoItem = {
       produtoId: produtoSelecionado.id,
       nomeProduto: produtoSelecionado.nome,
-      quantidade: parseInt(qtdItem, 10),
-      precoUnitario: produtoSelecionado.precoVenda,
-      desconto: parseFloat(descontoItem) || 0,
-      subtotal: (produtoSelecionado.precoVenda * qtdItem) - (parseFloat(descontoItem) || 0)
+      quantidade: qtd,
+      precoUnitario: preco,
+      desconto: desc,
+      subtotal: (preco * qtd) - desc
     };
 
     setItens([...itens, novoItem]);
@@ -72,8 +76,9 @@ const VendaForm = () => {
   };
 
   // Cálculos dinâmicos
-  const subtotalVenda = itens.reduce((acc, curr) => acc + curr.subtotal, 0);
-  const totalVenda = subtotalVenda - (parseFloat(descontoGeral) || 0);
+  const subtotalVenda = itens.reduce((acc, curr) => acc + (curr.subtotal || 0), 0);
+  const valorDescontoGeral = parseFloat(descontoGeral) || 0;
+  const totalVenda = subtotalVenda - valorDescontoGeral;
 
   // Salvar venda na API
   const handleRegistrarVenda = async () => {
@@ -88,17 +93,19 @@ const VendaForm = () => {
 
     const vendedorIdSalvo = localStorage.getItem('usuarioId') || 1;
 
+    // Payload estruturado evitando nulls em BigDecimals do Java
     const payload = {
       clienteId: parseInt(clienteId, 10),
       vendedorId: parseInt(vendedorIdSalvo, 10),
       status: 'PENDENTE',
       formaPagamento: formaPagamento,
-      desconto: parseFloat(descontoGeral) || 0,
-      observacao: observacao,
+      desconto: valorDescontoGeral,
+      observacao: observacao || '',
       itens: itens.map(i => ({
+        vendaId: 0, // Preenche o atributo anotado com @NotNull no ItemVendaRequestDto
         produtoId: i.produtoId,
         quantidade: i.quantidade,
-        desconto: i.desconto
+        desconto: parseFloat(i.desconto) || 0
       }))
     };
 
@@ -113,7 +120,9 @@ const VendaForm = () => {
         alert('Venda registrada com sucesso!');
         navigate('/vendas');
       } else {
-        alert('Erro ao registrar venda.');
+        const erroBody = await res.json().catch(() => null);
+        console.error('Erro retornado pela API:', erroBody);
+        alert('Erro ao registrar venda: ' + (erroBody?.message || res.statusText));
       }
     } catch (err) {
       console.error('Erro de conexão ao salvar venda:', err);
@@ -242,6 +251,7 @@ const VendaForm = () => {
               <span>Desconto Geral (R$):</span>
               <input
                 type="number"
+                min="0"
                 value={descontoGeral}
                 onChange={(e) => setDescontoGeral(e.target.value)}
                 style={{ width: '100px', padding: '5px', borderRadius: '4px', border: '1px solid #ccc', textAlign: 'right' }}
@@ -287,7 +297,6 @@ const VendaForm = () => {
               style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #ccc', marginBottom: '10px' }}
             />
 
-            {/* Lista de Seleção */}
             <div style={{ maxHeight: '150px', overflowY: 'auto', border: '1px solid #eee', borderRadius: '6px', marginBottom: '15px' }}>
               {produtos
                 .filter(p => p.nome.toLowerCase().includes(produtoBusca.toLowerCase()))
@@ -323,6 +332,7 @@ const VendaForm = () => {
                 <label style={{ fontSize: '12px', fontWeight: 'bold' }}>Desconto Item (R$)</label>
                 <input
                   type="number"
+                  min="0"
                   value={descontoItem}
                   onChange={(e) => setDescontoItem(e.target.value)}
                   style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ccc' }}
