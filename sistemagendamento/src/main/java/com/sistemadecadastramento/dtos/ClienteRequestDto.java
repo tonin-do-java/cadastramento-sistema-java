@@ -28,7 +28,7 @@ public class ClienteRequestDto {
 
     private String nomeFantasia;
 
-    @Pattern(regexp = "^1[01]\\.\\d{3}\\.\\d{3}-\\d$")
+    @Pattern(regexp = "^(10|11|2[0-9])\\.\\d{3}\\.\\d{3}-\\d{1}$", message = "escreva corretamente os numeros")
     private String inscricaoEstadual;
 
     @Valid
