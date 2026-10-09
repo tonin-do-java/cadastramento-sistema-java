@@ -8,6 +8,8 @@ const VendaDetalhes = () => {
 
   const [venda, setVenda] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [novoStatus, setNovoStatus] = useState('');
+
   const token = localStorage.getItem('tokenJWT');
   const headers = {
     'Content-Type': 'application/json',
@@ -18,7 +20,9 @@ const VendaDetalhes = () => {
     try {
       const res = await fetch(`/api/vendas/${id}`, { headers });
       if (res.ok) {
-        setVenda(await res.json());
+        const data = await res.json();
+        setVenda(data);
+        setNovoStatus(data.status);
       }
     } catch (err) {
       console.error('Erro ao buscar venda:', err);
@@ -31,15 +35,18 @@ const VendaDetalhes = () => {
     carregarVenda();
   }, [id]);
 
-  const handleAlterarStatus = async (novoStatus) => {
+  const handleAlterarStatus = async (statusParaSalvar) => {
+    const statusAlvo = statusParaSalvar || novoStatus;
     try {
-      const res = await fetch(`/api/vendas/${id}/status?status=${novoStatus}`, {
+      const res = await fetch(`/api/vendas/${id}/status?status=${statusAlvo}`, {
         method: 'PATCH', 
         headers
       });
       if (res.ok) {
-        alert(`Status alterado para ${novoStatus}!`);
+        alert(`Status alterado para ${statusAlvo}!`);
         carregarVenda();
+      } else {
+        alert('Erro ao alterar status da venda.');
       }
     } catch (err) {
       console.error('Erro ao alterar status:', err);
@@ -58,11 +65,54 @@ const VendaDetalhes = () => {
         <h1 style={{ margin: '10px 0 0 0', fontSize: '22px', color: '#2c3e50' }}>🛒 VENDA #{String(venda.id).padStart(5, '0')}</h1>
       </div>
 
-      <div style={{ backgroundColor: '#fff', padding: '15px 20px', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', marginBottom: '20px', display: 'flex', gap: '30px' }}>
-        <div><strong>Status:</strong> {venda.status}</div>
-        <div><strong>Data:</strong> {new Date(venda.dataHora).toLocaleDateString('pt-BR')}</div>
-        <div><strong>Vendedor ID:</strong> #{venda.vendedorId}</div>
-        <div><strong>Cliente ID:</strong> #{venda.clienteId}</div>
+      {/* DADOS DE CABEÇALHO E ALTERAÇÃO DE STATUS */}
+      <div style={{ 
+        backgroundColor: '#fff', 
+        padding: '20px', 
+        borderRadius: '8px', 
+        boxShadow: '0 2px 4px rgba(0,0,0,0.05)', 
+        marginBottom: '20px', 
+        display: 'flex', 
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: '20px' 
+      }}>
+        <div>
+          <p style={{ margin: '0 0 5px 0' }}><strong>Data:</strong> {new Date(venda.dataHora).toLocaleDateString('pt-BR')}</p>
+          <p style={{ margin: '0 0 5px 0' }}><strong>Vendedor ID:</strong> #{venda.vendedorId}</p>
+          <p style={{ margin: 0 }}><strong>Cliente ID:</strong> #{venda.clienteId}</p>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: '#f8f9fa', padding: '10px 15px', borderRadius: '6px' }}>
+          <label style={{ fontWeight: 'bold', fontSize: '14px', color: '#2c3e50' }}>Status do Pedido:</label>
+          <select
+            value={novoStatus}
+            onChange={(e) => setNovoStatus(e.target.value)}
+            style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #ccc', fontSize: '14px', fontWeight: 'bold' }}
+          >
+            <option value="PENDENTE">🟡 PENDENTE</option>
+            <option value="CONFIRMADA">🔵 CONFIRMADA</option>
+            <option value="EM_SEPARACAO">📦 EM SEPARAÇÃO</option>
+            <option value="EM_ROTA">🚚 EM ROTA</option>
+            <option value="ENTREGUE">🟢 ENTREGUE</option>
+            <option value="CANCELADA">🔴 CANCELADA</option>
+          </select>
+          <button
+            onClick={() => handleAlterarStatus(novoStatus)}
+            style={{
+              backgroundColor: '#3498db',
+              color: '#fff',
+              border: 'none',
+              padding: '8px 15px',
+              borderRadius: '6px',
+              fontWeight: 'bold',
+              cursor: 'pointer'
+            }}
+          >
+            Atualizar Status
+          </button>
+        </div>
       </div>
 
       {/* ITENS DA VENDA */}
@@ -81,7 +131,7 @@ const VendaDetalhes = () => {
           <tbody>
             {venda.itens?.map((item) => (
               <tr key={item.id} style={{ borderBottom: '1px solid #eee' }}>
-                <td style={{ padding: '10px' }}>Produto #{item.produto?.id || item.produtoId}</td>
+                <td style={{ padding: '10px' }}>Produto #{item.produtoId || item.produto?.id}</td>
                 <td style={{ padding: '10px' }}>{item.quantidade}</td>
                 <td style={{ padding: '10px' }}>R$ {item.precoUnitario?.toFixed(2)}</td>
                 <td style={{ padding: '10px' }}>R$ {item.desconto?.toFixed(2)}</td>
@@ -108,7 +158,7 @@ const VendaDetalhes = () => {
         </div>
       </div>
 
-      {/* AÇÕES */}
+      {/* AÇÕES BÁSICAS */}
       <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
         <button onClick={() => alert('Integração com módulo Fiscal disponível na V2!')} style={{ padding: '10px 15px', borderRadius: '6px', border: '1px solid #ccc', backgroundColor: '#fff', cursor: 'pointer' }}>
           🧾 Emitir Nota Fiscal
@@ -116,7 +166,7 @@ const VendaDetalhes = () => {
         <button onClick={() => window.print()} style={{ padding: '10px 15px', borderRadius: '6px', border: '1px solid #ccc', backgroundColor: '#fff', cursor: 'pointer' }}>
           🖨 Imprimir
         </button>
-        <button onClick={() => handleAlterarStatus('CANCELADA')} style={{ padding: '10px 15px', borderRadius: '6px', border: 'none', backgroundColor: '#e74c3c', color: '#fff', cursor: 'pointer' }}>
+        <button onClick={() => handleAlterarStatus('CANCELADA')} style={{ padding: '10px 15px', borderRadius: '6px', border: 'none', backgroundColor: '#e74c3c', color: '#fff', cursor: 'pointer', fontWeight: 'bold' }}>
           Cancelar Venda
         </button>
       </div>

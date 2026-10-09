@@ -20,6 +20,8 @@ import VendaDetalhes from './pages/Vendas/VendaDetalhes';
 import VendaForm from './pages/Vendas/VendaForm';
 import VendaList from './pages/Vendas/VendaList';
 
+import Cadastro from './pages/Home/Cadastro'
+
 function App() {
   return (
     <BrowserRouter>
@@ -46,6 +48,8 @@ function App() {
           <Route path="/vendas" element={<VendaList />} />
           <Route path="/vendas/nova" element={<VendaForm />} />
           <Route path="/vendas/:id" element={<VendaDetalhes />} />
+
+          <Route path="/cadastro" element={<Cadastro />} />
 
         </Routes>
       </div>

@@ -14,7 +14,7 @@ const VendaList = () => {
   const [filtroPagamento, setFiltroPagamento] = useState('');
   const token = localStorage.getItem('tokenJWT');
 
-   const headers = {
+  const headers = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${token}`
   };
@@ -22,18 +22,13 @@ const VendaList = () => {
   const carregarVendas = async () => {
     setLoading(true);
     try {
-      let url = '/api/vendas';
-      const params = new URLSearchParams();
-      if (filtroStatus) params.append('staus', filtroStatus);
-      if (params.toString()) url += `?${params.toString()}`;
-
-      const response = await fetch(url, { headers });
+      const response = await fetch('/api/vendas', { headers });
       if (response.ok) {
         const data = await response.json();
         setVendas(data);
       }
     } catch (error) {
-      console.error('Erro ao carregar vendas:', error);
+      console.error('Erro ao carregar vendas', error);
     } finally {
       setLoading(false);
     }
@@ -41,13 +36,30 @@ const VendaList = () => {
 
   useEffect(() => {
     carregarVendas();
-  }, [filtroStatus]);
+  }, []);
 
   const limparFiltros = () => {
     setBusca('');
     setFiltroStatus('');
     setFiltroPagamento('');
   };
+
+  // Filtragem dinâmica no frontend (busca + status + pagamento)
+  const vendasFiltradas = vendas.filter((venda) => {
+    const termo = busca.toLowerCase().trim();
+    const idVendaFormatado = String(venda.id || '').padStart(5, '0');
+    const idCliente = String(venda.clienteId || '');
+
+    const bateuBusca = !termo || 
+      idVendaFormatado.includes(termo) || 
+      idCliente.includes(termo) || 
+      `#${idVendaFormatado}`.includes(termo);
+
+    const bateuStatus = !filtroStatus || venda.status === filtroStatus;
+    const bateuPagamento = !filtroPagamento || venda.formaPagamento === filtroPagamento;
+
+    return bateuBusca && bateuStatus && bateuPagamento;
+  });
 
   const getStatusBadge = (status) => {
     const cores = {
@@ -82,7 +94,7 @@ const VendaList = () => {
         </p>
       </div>
 
-      {/* Barra de Pesquisa e Ações */}
+      {/* Pesquisa e Botão Nova Venda */}
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
@@ -95,7 +107,7 @@ const VendaList = () => {
       }}>
         <input
           type="text"
-          placeholder="🔎 Buscar por cliente, nº da venda..."
+          placeholder="🔎 Buscar por cliente ID, nº da venda (#00125)..."
           value={busca}
           onChange={(e) => setBusca(e.target.value)}
           style={{
@@ -124,7 +136,7 @@ const VendaList = () => {
         </button>
       </div>
 
-      {/* Filtros */}
+      {/* Controles de Filtros */}
       <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '20px' }}>
         <span style={{ fontWeight: 'bold', fontSize: '14px', color: '#2c3e50' }}>Filtros:</span>
         <select
@@ -189,14 +201,14 @@ const VendaList = () => {
               <tr>
                 <td colSpan="7" style={{ textAlign: 'center', padding: '20px' }}>Carregando vendas...</td>
               </tr>
-            ) : vendas.length === 0 ? (
+            ) : vendasFiltradas.length === 0 ? (
               <tr>
                 <td colSpan="7" style={{ textAlign: 'center', padding: '20px', color: '#7f8c8d' }}>
                   Nenhuma venda encontrada.
                 </td>
               </tr>
             ) : (
-              vendas.map((venda) => (
+              vendasFiltradas.map((venda) => (
                 <tr key={venda.id} style={{ borderBottom: '1px solid #eee' }}>
                   <td style={{ padding: '12px 15px', fontWeight: 'bold' }}>#{String(venda.id).padStart(5, '0')}</td>
                   <td style={{ padding: '12px 15px' }}>Cliente #{venda.clienteId}</td>
