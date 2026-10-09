@@ -74,7 +74,7 @@ public class VendaService {
             itemReal.setProduto(produtoService.buscarId(itemDto.getProdutoId()));
             itemReal.setQuantidade(itemDto.getQuantidade());
             itemReal.setPrecoUnitario(precoUnitario);
-            if(itemDto.getDesconto != null){
+            if(itemDto.getDesconto() != null){
                 itemReal.setDesconto(itemDto.getDesconto());
             }
             itemReal.setDesconto(BigDecimal.ZERO);
