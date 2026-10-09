@@ -4,23 +4,21 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-import lombok.RequiredArgsConstructor;
-
-import com.sistemadecadastramento.controllers.NotificacaoController;
-
 import com.sistemadecadastramento.dtos.EstoqueBaixoEvent;
-import com.sistemadecadastramento.dtos.ValidadeProximaEvent;
 import com.sistemadecadastramento.dtos.NotificacaoRequestDto;
-
+import com.sistemadecadastramento.dtos.ValidadeProximaEvent;
 import com.sistemadecadastramento.models.Produto;
 import com.sistemadecadastramento.models.Roles;
 import com.sistemadecadastramento.models.TipoNotificacao;
+import com.sistemadecadastramento.services.NotificacaoService;
+
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
 public class NotificacaoEventListener {
     
-    private final NotificacaoController controle;
+    private final NotificacaoService service;
 
     @Async
     @TransactionalEventListener
@@ -37,7 +35,7 @@ public class NotificacaoEventListener {
         dto.setTipoNotificacao(TipoNotificacao.ESTOQUE);
         dto.setIdReferencia(event.getMovimentacaoId());
 
-        controle.criarNotificacao(dto);
+        service.salvarCriar(dto);
 
     }
 
@@ -55,6 +53,6 @@ public class NotificacaoEventListener {
         dto.setTipoNotificacao(TipoNotificacao.VALIDADE);
         dto.setIdReferencia(event.getMovimentacaoId());
 
-        controle.criarNotificacao(dto);
+        service.salvarCriar(dto);
     }
 }
