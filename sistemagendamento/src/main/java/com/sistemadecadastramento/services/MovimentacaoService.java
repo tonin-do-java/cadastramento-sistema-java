@@ -80,7 +80,6 @@ public class MovimentacaoService {
         produtoRepository.save(produto);
 
         MovimentacaoEstoque novaMovimentacao = new MovimentacaoEstoque();
-        verificarEstoqueMinimo(produto, novaMovimentacao.getId());
         novaMovimentacao.setProduto(produto);
         novaMovimentacao.setUsuario(usuarioLogado);
         novaMovimentacao.setTipoMovimentacao(dto.getTipo());
@@ -90,10 +89,11 @@ public class MovimentacaoService {
         novaMovimentacao.setValidade(dto.getDataValidade());
         novaMovimentacao.setQuantidade(dto.getQuantidade());
 
-        repository.save(novaMovimentacao);
+        MovimentacaoEstoque movimentacaoSalva = repository.save(novaMovimentacao);
 
+        verificarEstoqueMinimo(produto, movimentacaoSalva.getId());
 
-        return new MovimentacaoResponseDto(novaMovimentacao);
+        return new MovimentacaoResponseDto(movimentacaoSalva);
     }
 
     private void validarLoteValidade(Produto produto, MovimentacaoRequestDto dto){
