@@ -31,8 +31,8 @@ public class VendaController {
     private final VendaService service;
 
     @GetMapping("/vendas")
-    public ResponseEntity<List<VendaResponseDto>> listarTodos(@RequestParam(required = false) Status staus, @RequestParam(required = false) LocalDateTime dataHora, @RequestParam(required = false) Long clienteId){
-        List<VendaResponseDto> vendas = service.listarComFiltros(staus, dataHora, clienteId);
+    public ResponseEntity<List<VendaResponseDto>> listarTodos(@RequestParam(required = false) Status status, @RequestParam(required = false) LocalDateTime dataHora, @RequestParam(required = false) Long clienteId){
+        List<VendaResponseDto> vendas = service.listarComFiltros(status, dataHora, clienteId);
 
         return ResponseEntity.ok(vendas);
     }
@@ -58,7 +58,7 @@ public class VendaController {
     }
 
     @PatchMapping("/vendas/{id}/status")
-    public ResponseEntity<VendaResponseDto> alterarStatus(@PathVariable Long id, Status status){
+    public ResponseEntity<VendaResponseDto> alterarStatus(@PathVariable Long id, @RequestParam("status") Status status){
         VendaResponseDto novoStatus = service.alterarStatus(id, status);
 
         return ResponseEntity.ok(novoStatus);
