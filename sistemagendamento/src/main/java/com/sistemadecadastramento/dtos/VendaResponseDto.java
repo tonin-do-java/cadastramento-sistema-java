@@ -2,10 +2,10 @@ package com.sistemadecadastramento.dtos;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import com.sistemadecadastramento.models.FormaPagamento;
-import com.sistemadecadastramento.models.ItemVenda;
 import com.sistemadecadastramento.models.Status;
 import com.sistemadecadastramento.models.Venda;
 
@@ -23,7 +23,7 @@ public class VendaResponseDto {
     private BigDecimal valorTotal;
     private BigDecimal valorSubtotal;
     private String observacao;
-    private List<ItemVenda> itens;
+    private List<ItemVendaResponseDto> itens;
 
     public VendaResponseDto(Venda vendaEntity){
         this.id = vendaEntity.getId();
@@ -36,7 +36,9 @@ public class VendaResponseDto {
         this.valorSubtotal = vendaEntity.getValorSubtotal();
         this.valorTotal = vendaEntity.getValorTotal();
         this.observacao = vendaEntity.getObservacao();
-        this.itens = vendaEntity.getItens();
+        this.itens = vendaEntity.getItens() != null 
+                ? vendaEntity.getItens().stream().map(ItemVendaResponseDto::new).toList()
+                : Collections.emptyList();
 
     }
 }
